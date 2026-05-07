@@ -1,0 +1,84 @@
+.main-page {
+  padding: 20px;
+}
+
+.main-page h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #1e3a8a;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card h2 {
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.card p {
+  margin-top: 8px;
+  line-height: 1.6;
+  color: #374151;
+}
+.card input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.card button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.card button {
+  width: 100%;
+  margin-top: 15px;
+  padding: 12px;
+  background-color: #1e3a8a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.card button:hover {
+  opacity: 0.9;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #1e3a8a;
+
+  color: white;
+
+  padding: 15px 20px;
+}
+
+.logout-btn {
+  background-color: white;
+  color: #1e3a8a;
+
+  border: none;
+
+  padding: 8px 14px;
+
+  border-radius: 8px;
+
+  cursor: pointer;
+}
