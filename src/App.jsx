@@ -18,8 +18,13 @@ import NoticeDetail from "./NoticeDetail"
 
 function App() {
 
-  const role =
-    localStorage.getItem("role")
+  // role 상태 관리
+  const [role] =
+    useState(
+      localStorage.getItem(
+        "role"
+      )
+    )
 
   // 일정
   const [duties, setDuties] =
