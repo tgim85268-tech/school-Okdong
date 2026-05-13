@@ -1,21 +1,18 @@
-import { useState } from "react"
-
 import {
-  useNavigate,
-} from "react-router-dom"
+  useState
+} from "react"
 
 function Admin({
   duties,
   addDuty,
   deleteDuty,
+
   notices,
   addNotice,
   deleteNotice,
 }) {
 
-  const navigate =
-    useNavigate()
-
+  // 일정
   const [date, setDate] =
     useState("")
 
@@ -25,88 +22,64 @@ function Admin({
   const [back, setBack] =
     useState("")
 
-  // 공지 제목
+  // 공지
   const [
     noticeTitle,
     setNoticeTitle,
   ] = useState("")
 
-  // 공지 내용
   const [
     noticeContent,
     setNoticeContent,
   ] = useState("")
 
-  // 로그아웃
-  const logout = () => {
-
-    localStorage.removeItem(
-      "role"
-    )
-
-    navigate("/")
-  }
-
   // 날짜 변환
   const formatDate = (
-    dateString
+    value
   ) => {
 
     const dateObj =
-      new Date(dateString)
+      new Date(value)
 
-    const month =
-      dateObj.getMonth() + 1
-
-    const day =
-      dateObj.getDate()
-
-    const days = [
-      "일",
-      "월",
-      "화",
-      "수",
-      "목",
-      "금",
-      "토",
-    ]
-
-    const dayName =
-      days[dateObj.getDay()]
-
-    return `${month}/${day} (${dayName})`
+    return dateObj.toLocaleDateString(
+      "ko-KR",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        weekday: "long",
+      }
+    )
   }
 
   // 일정 추가
-  const handleAddDuty = () => {
+  const handleAddDuty =
+    () => {
 
-    if (
-      !date ||
-      !front ||
-      !back
-    ) {
+      if (
+        !date ||
+        !front ||
+        !back
+      ) {
+        alert(
+          "모든 칸 입력"
+        )
+        return
+      }
 
-      alert(
-        "모든 칸을 입력하세요."
-      )
+      addDuty({
+        date:
+          formatDate(
+            date
+          ),
+        front,
+        back,
+      })
 
-      return
+      setDate("")
+      setFront("")
+      setBack("")
     }
-
-    addDuty({
-
-      date:
-        formatDate(date),
-
-      front: front,
-
-      back: back,
-    })
-
-    setDate("")
-    setFront("")
-    setBack("")
-  }
 
   // 공지 추가
   const handleAddNotice =
@@ -116,16 +89,13 @@ function Admin({
         !noticeTitle ||
         !noticeContent
       ) {
-
         alert(
-          "공지 제목과 내용을 입력하세요."
+          "공지 입력"
         )
-
         return
       }
 
       addNotice({
-
         title:
           noticeTitle,
 
@@ -137,46 +107,25 @@ function Admin({
       setNoticeContent("")
     }
 
-  // 날짜 정렬
-  const sortedDuties =
-    [...duties].sort(
-      (a, b) => {
+  // 로그아웃
+  const logout = () => {
 
-        const getDate = (
-          text
-        ) => {
-
-          const onlyDate =
-            text.split(" ")[0]
-
-          const [
-            month,
-            day,
-          ] =
-            onlyDate.split("/")
-
-          return new Date(
-            2026,
-            month - 1,
-            day
-          )
-        }
-
-        return (
-          getDate(a.date) -
-          getDate(b.date)
-        )
-      }
+    localStorage.removeItem(
+      "role"
     )
+
+    window.location.href =
+      "/"
+  }
 
   return (
 
     <div className="main-page">
 
-      <header className="header">
+      <div className="header">
 
         <h1>
-          학교 선도부 시스템
+          관리자 페이지
         </h1>
 
         <button
@@ -186,9 +135,10 @@ function Admin({
           로그아웃
         </button>
 
-      </header>
+      </div>
 
       {/* 일정 추가 */}
+
       <div className="card">
 
         <h2>
@@ -207,7 +157,7 @@ function Admin({
 
         <input
           type="text"
-          placeholder="정문 담당"
+          placeholder="앞문"
           value={front}
           onChange={(e) =>
             setFront(
@@ -218,7 +168,7 @@ function Admin({
 
         <input
           type="text"
-          placeholder="후문 담당"
+          placeholder="뒷문"
           value={back}
           onChange={(e) =>
             setBack(
@@ -228,7 +178,9 @@ function Admin({
         />
 
         <button
-          onClick={handleAddDuty}
+          onClick={
+            handleAddDuty
+          }
         >
           일정 추가
         </button>
@@ -236,10 +188,11 @@ function Admin({
       </div>
 
       {/* 공지 추가 */}
+
       <div className="card">
 
         <h2>
-          공지 작성
+          공지 추가
         </h2>
 
         <input
@@ -254,7 +207,6 @@ function Admin({
         />
 
         <textarea
-          rows="5"
           placeholder="공지 내용"
           value={noticeContent}
           onChange={(e) =>
@@ -269,92 +221,70 @@ function Admin({
             handleAddNotice
           }
         >
-          공지 추가
+          공지 등록
         </button>
 
       </div>
 
       {/* 공지 목록 */}
-      {notices.map((
-        notice,
-        index
-      ) => (
 
-        <div
-          className="card"
-          key={index}
-        >
+      <div className="card">
 
-          <h2>
-            📢 {notice.title}
-          </h2>
+        <h2>
+          공지 목록
+        </h2>
 
-          <p>
-            {notice.content}
-          </p>
+        {
+          notices.length ===
+          0 && (
+            <p>
+              공지 없음
+            </p>
+          )
+        }
 
-          <button
-            onClick={() =>
-              deleteNotice(
-                index
-              )
-            }
-          >
-            공지 삭제
-          </button>
+        {
+          notices.map(
+            (notice) => (
 
-        </div>
+              <div
+                key={notice.id}
+                style={{
+                  borderBottom:
+                    "1px solid #ddd",
+                  padding:
+                    "10px 0",
+                }}
+              >
 
-      ))}
+                <h3>
+                  {
+                    notice.title
+                  }
+                </h3>
 
-      {/* 일정 목록 */}
-      {sortedDuties.map((
-        duty,
-        index
-      ) => (
+                <p>
+                  {
+                    notice.content
+                  }
+                </p>
 
-        <div
-          className="card"
-          key={index}
-        >
+                <button
+                  onClick={() =>
+                    deleteNotice(
+                      notice.id
+                    )
+                  }
+                >
+                  삭제
+                </button>
 
-          <h2>
-            {duty.date}
-          </h2>
+              </div>
+            )
+          )
+        }
 
-          <p>
-
-            <strong>
-              정문:
-            </strong>
-
-            {" "}
-            {duty.front}
-
-          </p>
-
-          <p>
-
-            <strong>
-              후문:
-            </strong>
-
-            {" "}
-            {duty.back}
-
-          </p>
-
-          <button
-            onClick={() =>
-              deleteDuty(index)
-            }
-          >
-            삭제
-          </button>
-
-        </div>
-
-      ))}
+      </div>
 
     </div>
   )
